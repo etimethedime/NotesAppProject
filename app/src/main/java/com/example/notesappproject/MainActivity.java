@@ -21,4 +21,5 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+    // cosmas: ready to go!!
 }
