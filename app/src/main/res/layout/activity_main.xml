@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#418A6C">
+            android:background="#D1A943">
 
             <TextView
                 android:id="@+id/textView"
@@ -41,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#3D5645"
+            android:background="#957B4A"
             android:orientation="horizontal">
 
             <Space
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="#7EB882"
+                android:backgroundTint="#D5C581"
                 android:text="Save" />
         </LinearLayout>
     </LinearLayout>
