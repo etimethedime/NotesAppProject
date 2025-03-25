@@ -73,7 +73,7 @@ public class MemoDBSource {
     public ArrayList<Memo> getMemos(String sortField, String sortOrder) {
         ArrayList<Memo> memos = new ArrayList<>();
         try {
-            String query = "SELECT * FROM memos ORDER BY " + sortField + " " + sortOrder;
+            String query = "SELECT * FROM Memos ORDER BY " + sortField + " " + sortOrder;
             Cursor cursor = database.rawQuery(query, null);
 
             Memo newMemo;
@@ -95,9 +95,9 @@ public class MemoDBSource {
         return memos;
     }
 
-    public Memo getSpecificMemo(long memoId) {
+    public Memo getSpecificMemo(int memoId) {
         Memo memo = new Memo();
-        String query = "SELECT * FROM memos WHERE id = " + memoId;
+        String query = "SELECT * FROM Memos WHERE id = " + memoId;
         Cursor cursor = database.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             memo.setId(cursor.getInt(0));
@@ -109,8 +109,27 @@ public class MemoDBSource {
         }
         return memo;
     }
+    public int getLastMemoId() {
+        int lastId = -1;
+        Cursor cursor = null;
+        try {
+            String query = "SELECT MAX(id) FROM memos";
+            cursor = database.rawQuery(query, null);
 
-    public boolean deleteMemo(long memoId) {
+            if (cursor != null && cursor.moveToFirst()) {
+                lastId = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e("MemoDBSource", "Error getting last memo ID", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return lastId;
+    }
+
+    public boolean deleteMemo(int memoId) {
         boolean didDelete = false;
         try {
             didDelete = database.delete("memos", "id = " + memoId, null) > 0;
