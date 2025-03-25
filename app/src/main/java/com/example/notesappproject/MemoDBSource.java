@@ -26,25 +26,48 @@ public class MemoDBSource {
     }
 
     public boolean insertMemo(Memo memo) {
-        ContentValues values = new ContentValues();
-        values.put("title", memo.getTitle());
-        values.put("date", memo.getDate().getTimeInMillis());
-        values.put("body", memo.getBody());
-        values.put("priority", memo.getPriority());
+        boolean didSucceed = false;
+        try {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put("title", memo.getTitle());
+            initialValues.put("date", memo.getDate());  // Store date as string
+            initialValues.put("body", memo.getBody());
+            initialValues.put("priority", memo.getPriority());
 
-        long result = database.insert("memos", null, values);
-        return result != -1;
+            long result = database.insert("memos", null, initialValues);
+
+            if (result > 0) {
+                didSucceed = true;
+            } else {
+                Log.e("MemoDBSource", "Error inserting memo into database");
+            }
+
+        } catch (Exception e) {
+            Log.e("MemoDBSource", "Error during memo insertion", e);
+        }
+        return didSucceed;
     }
 
     public boolean updateMemo(Memo memo) {
-        ContentValues values = new ContentValues();
-        values.put("title", memo.getTitle());
-        values.put("date", memo.getDate().getTimeInMillis());
-        values.put("body", memo.getBody());
-        values.put("priority", memo.getPriority());
+        boolean didSucceed = false;
+        try{
+            ContentValues updateValues = new ContentValues();
+            updateValues.put("title", memo.getTitle());
+            updateValues.put("date", memo.getDate());  // Store date as string
+            updateValues.put("body", memo.getBody());
+            updateValues.put("priority", memo.getPriority());
 
-        int rowsAffected = database.update("memos", values, "id = ?", new String[]{String.valueOf(memo.getId())});
-        return rowsAffected > 0;
+            int rowsAffected = database.update("memos", updateValues, "id = ?", new String[]{String.valueOf(memo.getId())});
+
+            if (rowsAffected > 0) {
+                didSucceed = true;
+            } else {
+                Log.e("MemoDBSource", "Error updating memo in database");
+            }
+        } catch (Exception e) {
+            Log.e("MemoDBSource", "Error updating memo", e);
+        }
+        return didSucceed;
     }
 
     public ArrayList<Memo> getMemos(String sortField, String sortOrder) {
@@ -59,7 +82,7 @@ public class MemoDBSource {
                 newMemo = new Memo();
                 newMemo.setId(cursor.getInt(0));
                 newMemo.setTitle(cursor.getString(1));
-                newMemo.setDate(cursor.getString(2));  // Assuming date is stored as a string or timestamp
+                newMemo.setDate(cursor.getString(2));  // Parse date string into Calendar
                 newMemo.setBody(cursor.getString(3));
                 newMemo.setPriority(cursor.getInt(4));
                 memos.add(newMemo);
@@ -79,7 +102,7 @@ public class MemoDBSource {
         if (cursor.moveToFirst()) {
             memo.setId(cursor.getInt(0));
             memo.setTitle(cursor.getString(1));
-            memo.setDate(cursor.getString(2));  // Assuming date is stored as a string or timestamp
+            memo.setDate(cursor.getString(2));  // Parse date string into Calendar
             memo.setBody(cursor.getString(3));
             memo.setPriority(cursor.getInt(4));
             cursor.close();
@@ -96,5 +119,4 @@ public class MemoDBSource {
         }
         return didDelete;
     }
-}
 }
