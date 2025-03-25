@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity{
     }
 
     public void initListButton() {
-        ImageButton imgButton = findViewById(R.id.addButton);
+        ImageButton imgButton = findViewById(R.id.listButton);
         imgButton.setOnClickListener(i -> {
             Intent intent = new Intent(SettingsActivity.this, NotesListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
