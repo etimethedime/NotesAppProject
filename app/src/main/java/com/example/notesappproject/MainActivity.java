@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
-    // cosmas: ready to go!!
-    // ezra: ready to go!!
-    // Mikiyas: ready to go!!
+
+
 }
