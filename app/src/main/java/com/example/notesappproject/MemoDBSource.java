@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public class MemoDBSource {
+    /*
+
     private MemoDBHelper dbHelper;
     private SQLiteDatabase database;
 
@@ -17,5 +19,14 @@ public class MemoDBSource {
     public void close() {
         dbHelper.close();
     }
+    public boolean insertMemo(){
+
+    }
+    public boolean updateMemo(){
+
+    }
+
+     */
+
 
 }
