@@ -190,12 +190,12 @@
             android:id="@+id/radioMedPriority"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:text="RadioButton" />
+            android:text="Medium" />
 
         <RadioButton
             android:id="@+id/radioLowPriority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="Low" />
     </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>
