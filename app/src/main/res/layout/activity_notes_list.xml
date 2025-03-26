@@ -50,7 +50,7 @@
                 android:layout_weight="1" />
 
             <Switch
-                android:id="@+id/switch1"
+                android:id="@+id/switchDelete"
                 android:layout_width="106dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"

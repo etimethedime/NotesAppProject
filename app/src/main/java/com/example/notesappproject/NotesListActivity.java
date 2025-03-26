@@ -2,7 +2,9 @@ package com.example.notesappproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,7 @@ public class NotesListActivity extends AppCompatActivity {
         initAddButton();
         initListButton();
         initSettingsButton();
+        initDeleteSwitch();
     }
 
     public void initAddButton() {
@@ -48,6 +51,17 @@ public class NotesListActivity extends AppCompatActivity {
             Intent intent = new Intent(NotesListActivity.this, SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+        });
+    }
+    private void initDeleteSwitch() {
+        Switch s = findViewById(R.id.switchDelete);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged (CompoundButton compoundButton,boolean b){
+                Boolean status = compoundButton.isChecked();
+               // MemoAdapter.setDelete(status);;
+                //MemoAdapter.notifyDataSetChanged();
+            }
         });
     }
 }
