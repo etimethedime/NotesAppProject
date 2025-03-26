@@ -2,7 +2,11 @@ package com.example.notesappproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +15,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Memo currentMemo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
         initAddButton();
         initListButton();
         initSettingsButton();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initMemo(extras.getInt("memoID"));
+        } else {
+            currentMemo = new Memo();
+        }
     }
 
     public void initAddButton() {
@@ -51,5 +63,50 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initMemo(int id) {
+        MemoDBSource dbSource = new MemoDBSource(this);
+        try{
+            dbSource.open();
+            currentMemo = dbSource.getSpecificMemo(id);
+            dbSource.close();
+        } catch (Exception e) {
+            Log.w(this.getLocalClassName(), "Error getting Memo from database");
+        }
+        final EditText titleText = findViewById(R.id.TitleEditText);
+        final EditText bodyText = findViewById(R.id.BodyEditText);
+        final EditText dateText = findViewById(R.id.DateEditText);
+        final RadioGroup priorityGroup = findViewById(R.id.priorityRadioGroup);
+        titleText.setText(currentMemo.getTitle());
+        bodyText.setText(currentMemo.getBody());
+        dateText.setText(currentMemo.getDate());
+        switch (currentMemo.getPriority()) {
+            case 1:
+                priorityGroup.check(R.id.HighRadioButton);
+                break;
+            case 2:
+                priorityGroup.check(R.id.MediumRadioButton);
+                break;
+            case 3:
+                priorityGroup.check(R.id.LowRadioButton);
+                break;
+        }
 
+    }
+
+    private void initSaveButton() {
+        final EditText titleText = findViewById(R.id.TitleEditText);
+        final EditText bodyText = findViewById(R.id.BodyEditText);
+        final EditText dateText = findViewById(R.id.DateEditText);
+        final RadioGroup priorityGroup = findViewById(R.id.priorityRadioGroup);
+        Button saveButton = findViewById(R.id.SaveButton);
+    }
+
+    private void initTextChangedEvents() {
+        final EditText bodyText = findViewById(R.id.BodyEditText);
+        final EditText titleText = findViewById(R.id.TitleEditText);
+    }
 }
+
+
+
+
