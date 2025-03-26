@@ -105,13 +105,13 @@ public class SettingsActivity extends AppCompatActivity{
             RadioButton rbPriority = SettingsActivity.this.findViewById(R.id.radioPriority);
             RadioButton rbSubject = SettingsActivity.this.findViewById(R.id.radioSubject);
             if (rbPriority.isChecked()) {
-                SettingsActivity.this.getSharedPreferences("MyContactListPreferences",
+                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
                         Context.MODE_PRIVATE).edit().putString("sortfield", "priority").apply();
             } else if (rbSubject.isChecked()) {
-                SettingsActivity.this.getSharedPreferences("MyContactListPreferences",
+                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
                         Context.MODE_PRIVATE).edit().putString("sortfield", "subject").apply();
             } else {
-                SettingsActivity.this.getSharedPreferences("MyContactListPreferences",
+                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
                         Context.MODE_PRIVATE).edit().putString("sortfield", "date").apply();
             }
 
