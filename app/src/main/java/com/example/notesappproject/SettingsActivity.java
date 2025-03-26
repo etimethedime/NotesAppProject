@@ -19,6 +19,7 @@ public class SettingsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.settings);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settingsMain), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -31,15 +32,8 @@ public class SettingsActivity extends AppCompatActivity{
         initSettings();
         initSortByClick();
         initSortPriorityClick();
+
     }
-
-    RadioButton rbPriority = findViewById(R.id.radioPriority);
-    RadioButton rbSubject = findViewById(R.id.radioSubject);
-    RadioButton rbDate = findViewById(R.id.radioDate);
-
-    RadioButton rbHigh = findViewById(R.id.radioHighPriority);
-    RadioButton rbMed = findViewById(R.id.radioMedPriority);
-    RadioButton rbLow = findViewById(R.id.radioLowPriority);
 
 
     public void initAddButton() {
@@ -66,6 +60,15 @@ public class SettingsActivity extends AppCompatActivity{
     }
 
     public void initSettings() {
+        RadioButton rbPriority = findViewById(R.id.radioPriority);
+        RadioButton rbSubject = findViewById(R.id.radioSubject);
+        RadioButton rbDate = findViewById(R.id.radioDate);
+
+        RadioButton rbHigh = findViewById(R.id.radioHighPriority);
+        RadioButton rbMed = findViewById(R.id.radioMedPriority);
+        RadioButton rbLow = findViewById(R.id.radioLowPriority);
+
+
         String sortBy = getSharedPreferences("MyMemoPreferences",
                 Context.MODE_PRIVATE).getString("sortfield", "date");
 

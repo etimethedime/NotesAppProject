@@ -5,7 +5,8 @@
     android:id="@+id/settingsMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDEAEA">
+    android:background="#EDEAEA"
+    tools:context=".SettingsActivity">
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="0dp"
