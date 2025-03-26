@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
+import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             currentMemo = new Memo();
         }
+        initSaveButton();
     }
 
     public void initAddButton() {
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initMemo(int id) {
         MemoDBSource dbSource = new MemoDBSource(this);
-        try{
+        try {
             dbSource.open();
             currentMemo = dbSource.getSpecificMemo(id);
             dbSource.close();
@@ -73,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
             Log.w(this.getLocalClassName(), "Error getting Memo from database");
         }
         final EditText titleText = findViewById(R.id.TitleEditText);
-        final EditText bodyText = findViewById(R.id.BodyEditText);
         final EditText dateText = findViewById(R.id.DateEditText);
+        final EditText bodyText = findViewById(R.id.BodyEditText);
         final RadioGroup priorityGroup = findViewById(R.id.priorityRadioGroup);
         titleText.setText(currentMemo.getTitle());
-        bodyText.setText(currentMemo.getBody());
         dateText.setText(currentMemo.getDate());
+        bodyText.setText(currentMemo.getBody());
         switch (currentMemo.getPriority()) {
             case 1:
                 priorityGroup.check(R.id.HighRadioButton);
@@ -94,11 +96,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSaveButton() {
-        final EditText titleText = findViewById(R.id.TitleEditText);
-        final EditText bodyText = findViewById(R.id.BodyEditText);
-        final EditText dateText = findViewById(R.id.DateEditText);
-        final RadioGroup priorityGroup = findViewById(R.id.priorityRadioGroup);
         Button saveButton = findViewById(R.id.SaveButton);
+        saveButton.setOnClickListener(v -> {
+
+            Log.d("Saved Memo.", "Title " + currentMemo.getTitle() +
+                    ", Date Published: " + currentMemo.getDate() +
+                    ", Body: " + currentMemo.getBody() +
+                    ", Priority: " + currentMemo.getPriority());
+
+            Boolean wasSuccessful;
+            MemoDBSource ds = new MemoDBSource(this);
+            ds.open();
+            if (currentMemo.getId() == -1) {
+                wasSuccessful = ds.insertMemo(currentMemo);
+                if (wasSuccessful) {
+                    int newId = ds.getLastMemoId();
+                    currentMemo.setId(newId);
+                    Log.d("initSaveMemo", "Memo inserted successfully with ID: " + newId);
+                } else {
+                    Log.d("initSaveMemo", "Memo insertion failed.");
+                }
+            } else {
+                wasSuccessful = ds.updateMemo(currentMemo);
+                if (wasSuccessful) {
+                    Log.d("initSaveMemo", "Memo updated successfully.");
+                } else {
+                    Log.d("initSaveMemo", "Memo update failed.");
+                }
+            }
+
+            ds.close();
+        });
+
     }
 
     private void initTextChangedEvents() {
@@ -106,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText titleText = findViewById(R.id.TitleEditText);
     }
 }
+
 
 
 
