@@ -30,40 +30,28 @@ public class MemoDBSource {
         try {
             ContentValues initialValues = new ContentValues();
             initialValues.put("title", memo.getTitle());
-            initialValues.put("date", memo.getDate());  // Store date as string
+            initialValues.put("date", memo.getDate());
             initialValues.put("body", memo.getBody());
             initialValues.put("priority", memo.getPriority());
 
-            long result = database.insert("memos", null, initialValues);
-
-            if (result > 0) {
-                didSucceed = true;
-            } else {
-                Log.e("MemoDBSource", "Error inserting memo into database");
-            }
-
+            long result = database.insert("Memo", null, initialValues);
+            didSucceed = result > 0;
         } catch (Exception e) {
             Log.e("MemoDBSource", "Error during memo insertion", e);
         }
         return didSucceed;
     }
-
     public boolean updateMemo(Memo memo) {
         boolean didSucceed = false;
-        try{
+        try {
             ContentValues updateValues = new ContentValues();
             updateValues.put("title", memo.getTitle());
-            updateValues.put("date", memo.getDate());  // Store date as string
+            updateValues.put("date", memo.getDate());
             updateValues.put("body", memo.getBody());
             updateValues.put("priority", memo.getPriority());
 
-            int rowsAffected = database.update("memos", updateValues, "id = ?", new String[]{String.valueOf(memo.getId())});
-
-            if (rowsAffected > 0) {
-                didSucceed = true;
-            } else {
-                Log.e("MemoDBSource", "Error updating memo in database");
-            }
+            int rowsAffected = database.update("Memo", updateValues, "id = ?", new String[]{String.valueOf(memo.getId())});
+            didSucceed = rowsAffected > 0;
         } catch (Exception e) {
             Log.e("MemoDBSource", "Error updating memo", e);
         }
@@ -72,51 +60,63 @@ public class MemoDBSource {
 
     public ArrayList<Memo> getMemos(String sortField, String sortOrder) {
         ArrayList<Memo> memos = new ArrayList<>();
+        Cursor cursor = null;
         try {
-            String query = "SELECT * FROM Memos ORDER BY " + sortField + " " + sortOrder;
-            Cursor cursor = database.rawQuery(query, null);
+            String query = "SELECT * FROM Memo ORDER BY " + sortField + " " + sortOrder;
+            cursor = database.rawQuery(query, null);
 
-            Memo newMemo;
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                newMemo = new Memo();
-                newMemo.setId(cursor.getInt(0));
-                newMemo.setTitle(cursor.getString(1));
-                newMemo.setDate(cursor.getString(2));  // Parse date string into Calendar
-                newMemo.setBody(cursor.getString(3));
-                newMemo.setPriority(cursor.getInt(4));
-                memos.add(newMemo);
-                cursor.moveToNext();
+            if (cursor.moveToFirst()) {
+                do {
+                    Memo newMemo = new Memo();
+                    newMemo.setId(cursor.getInt(0));
+                    newMemo.setTitle(cursor.getString(1));
+                    newMemo.setDate(cursor.getString(2));
+                    newMemo.setBody(cursor.getString(3));
+                    newMemo.setPriority(cursor.getInt(4));
+                    memos.add(newMemo);
+                } while (cursor.moveToNext());
             }
-            cursor.close();
         } catch (Exception e) {
             Log.e("MemoDBSource", "Error getting memos", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return memos;
     }
 
     public Memo getSpecificMemo(int memoId) {
-        Memo memo = new Memo();
-        String query = "SELECT * FROM Memos WHERE id = " + memoId;
-        Cursor cursor = database.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            memo.setId(cursor.getInt(0));
-            memo.setTitle(cursor.getString(1));
-            memo.setDate(cursor.getString(2));  // Parse date string into Calendar
-            memo.setBody(cursor.getString(3));
-            memo.setPriority(cursor.getInt(4));
-            cursor.close();
+        Memo memo = null;
+        Cursor cursor = null;
+        try {
+            String query = "SELECT * FROM Memo WHERE id = ?";
+            cursor = database.rawQuery(query, new String[]{String.valueOf(memoId)});
+
+            if (cursor.moveToFirst()) {
+                memo = new Memo();
+                memo.setId(cursor.getInt(0));
+                memo.setTitle(cursor.getString(1));
+                memo.setDate(cursor.getString(2));
+                memo.setBody(cursor.getString(3));
+                memo.setPriority(cursor.getInt(4));
+            }
+        } catch (Exception e) {
+            Log.e("MemoDBSource", "Error getting specific memo", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return memo;
     }
+
     public int getLastMemoId() {
         int lastId = -1;
         Cursor cursor = null;
         try {
-            String query = "SELECT MAX(id) FROM memos";
-            cursor = database.rawQuery(query, null);
-
-            if (cursor != null && cursor.moveToFirst()) {
+            cursor = database.rawQuery("SELECT MAX(id) FROM Memo", null);
+            if (cursor.moveToFirst()) {
                 lastId = cursor.getInt(0);
             }
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class MemoDBSource {
     public boolean deleteMemo(int memoId) {
         boolean didDelete = false;
         try {
-            didDelete = database.delete("memos", "id = " + memoId, null) > 0;
+            didDelete = database.delete("Memo", "id = ?", new String[]{String.valueOf(memoId)}) > 0;
         } catch (Exception e) {
             Log.e("MemoDBSource", "Error deleting memo", e);
         }

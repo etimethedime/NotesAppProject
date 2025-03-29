@@ -2,12 +2,13 @@ package com.example.notesappproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
-import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +16,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
+
 
     private Memo currentMemo;
 
@@ -34,12 +41,22 @@ public class MainActivity extends AppCompatActivity {
         initListButton();
         initSettingsButton();
         Bundle extras = getIntent().getExtras();
+        Log.d("onCreate", "Extras: " + extras);
         if (extras != null) {
             initMemo(extras.getInt("memoID"));
         } else {
             currentMemo = new Memo();
+            setDefaultDate();
         }
         initSaveButton();
+        initTextChangedEvents();
+    }
+    private void setDefaultDate() {
+        EditText dateText = findViewById(R.id.DateEditText);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String currentDate = sdf.format(new Date());
+        dateText.setText(currentDate);
+        currentMemo.setDate(currentDate);
     }
 
     public void initAddButton() {
@@ -129,14 +146,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     private void initTextChangedEvents() {
         final EditText bodyText = findViewById(R.id.BodyEditText);
+        bodyText.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            public void afterTextChanged(Editable text) {
+                currentMemo.setBody(text.toString());
+
+            }
+        });
         final EditText titleText = findViewById(R.id.TitleEditText);
+        titleText.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            public void afterTextChanged(Editable text) {
+                currentMemo.setTitle(text.toString());
+            }
+        });
     }
 }
-
-
-
-
-
