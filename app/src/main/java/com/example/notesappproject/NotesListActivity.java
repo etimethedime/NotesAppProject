@@ -6,14 +6,24 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class NotesListActivity extends AppCompatActivity {
+
+    private ArrayList<Memo> memos;
+    MemoAdapter memoAdapter;
+
+    RecyclerView notesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,25 @@ public class NotesListActivity extends AppCompatActivity {
 
         String sortPriority = getSharedPreferences("MyMemoPreferences",
                 Context.MODE_PRIVATE).getString("sortpriority", "high");
+
+        MemoDBSource ds = new MemoDBSource(this);
+
+
+        try {
+            ds.open();
+            memos = ds.getMemos(sortBy,sortPriority);
+            ds.close();
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            notesList = findViewById(R.id.rvNotes);
+            notesList.setLayoutManager(layoutManager);
+
+            memoAdapter = new MemoAdapter(memos, NotesListActivity.this);
+            //memoAdapter.setOnItemClickListener(onItemClickListener);
+            notesList.setAdapter(memoAdapter);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void initAddButton() {
