@@ -12,6 +12,10 @@ public class Memo {
     private String body;
     private int priority;
 
+    public Memo() {
+        this.id = -1;
+    }
+
     public int getId() {
         return id;
     }

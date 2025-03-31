@@ -50,7 +50,7 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/buttonSave"
+                android:id="@+id/SaveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -124,7 +124,7 @@
 
 
             <EditText
-                android:id="@+id/noteEditText"
+                android:id="@+id/BodyEditText"
                 android:layout_width="378dp"
                 android:layout_height="329dp"
                 android:layout_marginStart="8dp"
@@ -173,19 +173,19 @@
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/HighRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:text="High" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/MediumRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
                 android:text="Medium" />
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/LowRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:text="Low" />

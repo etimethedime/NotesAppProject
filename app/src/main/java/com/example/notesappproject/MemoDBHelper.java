@@ -10,7 +10,7 @@ public class MemoDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String CREATE_TABLE_MEMO =
-            "CREATE TABLE Memo (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "CREATE TABLE Memo (id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + "title TEXT NOT NULL, "
                     + "date TEXT, "
                     + "body TEXT, "
@@ -18,6 +18,7 @@ public class MemoDBHelper extends SQLiteOpenHelper {
 
     public MemoDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        Log.d("MemoDBHelper", "Creating the Memo table.");
     }
 
     @Override
