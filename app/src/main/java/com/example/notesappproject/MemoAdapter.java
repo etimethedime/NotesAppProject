@@ -53,7 +53,7 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             parent, false);
     return new MemoViewHolder(v);
 }
-
+//
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         MemoViewHolder cvh = (MemoViewHolder) holder;
