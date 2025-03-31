@@ -1,5 +1,6 @@
 package com.example.notesappproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CompoundButton;
@@ -29,6 +30,12 @@ public class NotesListActivity extends AppCompatActivity {
         initListButton();
         initSettingsButton();
         initDeleteSwitch();
+
+        String sortBy = getSharedPreferences("MyMemoPreferences",
+                Context.MODE_PRIVATE).getString("sortfield", "date");
+
+        String sortPriority = getSharedPreferences("MyMemoPreferences",
+                Context.MODE_PRIVATE).getString("sortpriority", "high");
     }
 
     public void initAddButton() {
@@ -59,7 +66,7 @@ public class NotesListActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged (CompoundButton compoundButton,boolean b){
                 Boolean status = compoundButton.isChecked();
-               // MemoAdapter.setDelete(status);;
+                //MemoAdapter.setDelete(status);;
                 //MemoAdapter.notifyDataSetChanged();
             }
         });
