@@ -3,9 +3,13 @@ package com.example.notesappproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SettingsActivity extends AppCompatActivity{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity{
         initSettings();
         initSortByClick();
         initSortPriorityClick();
-
+        initSortSearch();
     }
 
 
@@ -137,5 +142,24 @@ public class SettingsActivity extends AppCompatActivity{
         });
     }
 
+    private void initSortSearch() {
+        Button search = findViewById(R.id.buttonSearch);
+        EditText searchBar = findViewById(R.id.editSubjectFilter);
+        TextView errorMessage = findViewById(R.id.errorView);
+        String message = "No Memo Found! Try again.";
+
+
+        search.setOnClickListener( s -> {
+            String keyword = searchBar.getText().toString().trim();
+            if (!keyword.isEmpty()) {
+                Intent intent = new Intent(SettingsActivity.this, NotesListActivity.class);
+                intent.putExtra("SEARCH_KEYWORD", keyword);
+                startActivity(intent);
+            } else {
+                Toast.makeText(SettingsActivity.this, "Enter a keyword!", Toast.LENGTH_SHORT).show();
+                errorMessage.setText(message);
+            }
+        });
+    }
 
 }
