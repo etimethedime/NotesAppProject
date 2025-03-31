@@ -138,4 +138,39 @@ public class MemoDBSource {
         }
         return didDelete;
     }
+    public ArrayList<Memo> searchMemos(String keyword) {
+        ArrayList<Memo> memoList = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT * FROM Memo WHERE title LIKE ? OR body LIKE ?";
+            String[] args = new String[]{"%" + keyword + "%", "%" + keyword + "%"};
+
+            cursor = database.rawQuery(query, args);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Memo memo = new Memo();
+                    memo.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                    memo.setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
+                    memo.setDate(cursor.getString(cursor.getColumnIndexOrThrow("date")));
+                    memo.setBody(cursor.getString(cursor.getColumnIndexOrThrow("body")));
+                    memo.setPriority(cursor.getInt(cursor.getColumnIndexOrThrow("priority")));
+
+                    memoList.add(memo);
+                } while (cursor.moveToNext());
+            }
+
+            Log.d("MemoDBSource", "Search successful. Found " + memoList.size() + " results.");
+
+        } catch (Exception e) {
+            Log.e("MemoDBSource", "Error searching memos", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return memoList;
+    }
 }
