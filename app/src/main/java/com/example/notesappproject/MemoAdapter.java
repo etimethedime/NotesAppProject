@@ -58,22 +58,21 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         MemoViewHolder cvh = (MemoViewHolder) holder;
         cvh.textViewTitle.setText(memoData.get(position).getTitle());
-        cvh.getTextDate().setText(memoData.get(position).getTextDate());
+        cvh.textDate.setText(memoData.get(position).getDate());
         if (isDeleting) {
-            cvh.getDeleteButton().setVisibility(View.VISIBLE);
-            cvh.getDeleteButton().setOnClickListener(new View.OnClickListener() {
+            cvh.deleteButton.setVisibility(View.VISIBLE);
+            cvh.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteItem(position);
+                    int currentPosition = cvh.getAdapterPosition();
+                    if (currentPosition != RecyclerView.NO_POSITION) {
+                        deleteItem(currentPosition);
+                    }
                 }
             });
         }
         else {
-            cvh.getDeleteButton().setVisibility(View.INVISIBLE);
-        }
-    }
-    public void setDelete(boolean b) {
-        isDeleting = b;
+            cvh.deleteButton.setVisibility(View.INVISIBLE);        }
     }
     private void deleteItem(int position) {
         Memo memo = memoData.get(position);
@@ -96,6 +95,9 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
     @Override
     public int getItemCount() {
         return memoData.size();
+    }
+    public void setDelete(boolean b) {
+        isDeleting = b;
     }
 
 }

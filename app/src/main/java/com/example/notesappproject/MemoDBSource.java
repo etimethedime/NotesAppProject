@@ -57,6 +57,15 @@ public class MemoDBSource {
         }
         return didSucceed;
     }
+    public boolean deleteMemo(int memoId) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("Memo", "id = ?", new String[]{String.valueOf(memoId)}) > 0;
+        } catch (Exception e) {
+            Log.e("MemoDBSource", "Error deleting memo", e);
+        }
+        return didDelete;
+    }
 
     public ArrayList<Memo> getMemos(String sortField, String sortOrder) {
         ArrayList<Memo> memos = new ArrayList<>();
@@ -127,16 +136,6 @@ public class MemoDBSource {
             }
         }
         return lastId;
-    }
-
-    public boolean deleteMemo(int memoId) {
-        boolean didDelete = false;
-        try {
-            didDelete = database.delete("Memo", "id = ?", new String[]{String.valueOf(memoId)}) > 0;
-        } catch (Exception e) {
-            Log.e("MemoDBSource", "Error deleting memo", e);
-        }
-        return didDelete;
     }
     public ArrayList<Memo> searchMemos(String keyword) {
         ArrayList<Memo> memoList = new ArrayList<>();
