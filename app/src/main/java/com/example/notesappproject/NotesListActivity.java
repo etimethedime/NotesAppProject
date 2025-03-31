@@ -3,6 +3,7 @@ package com.example.notesappproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -22,6 +23,18 @@ public class NotesListActivity extends AppCompatActivity {
 
     private ArrayList<Memo> memos;
     MemoAdapter memoAdapter;
+
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+            int notesId = memos.get(position).getId();
+            Intent intent = new Intent(NotesListActivity.this, MainActivity.class);
+            intent.putExtra("notesID",notesId);
+            startActivity(intent);
+        }
+    };
 
     RecyclerView notesList;
 
@@ -60,7 +73,7 @@ public class NotesListActivity extends AppCompatActivity {
             notesList.setLayoutManager(layoutManager);
 
             memoAdapter = new MemoAdapter(memos, NotesListActivity.this);
-            //memoAdapter.setOnItemClickListener(onItemClickListener);
+            memoAdapter.setOnItemClickListener(onItemClickListener);
             notesList.setAdapter(memoAdapter);
         } catch (Exception e) {
             Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
