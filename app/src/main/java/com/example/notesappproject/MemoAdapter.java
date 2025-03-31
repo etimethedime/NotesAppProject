@@ -15,14 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MemoAdapter extends RecyclerView.Adapter {
-    private final ArrayList<Memo> memoData;
+    private ArrayList<Memo> memoData;
     private boolean isDeleting;
     private Context parentContext;
 
 
     private View.OnClickListener mOnItemClickListener;
-
-
 
     public class MemoViewHolder extends RecyclerView.ViewHolder {
         public TextView textViewTitle;
@@ -38,22 +36,9 @@ public class MemoAdapter extends RecyclerView.Adapter {
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
         }
-
-        public TextView getTextViewTitle() {
-            return textViewTitle;
-        }
-
-        public TextView getTextDate() {
-            return textDate;
-        }
-        public Button getDeleteButton(){
-            return deleteButton;
-        }
     }
-
-
-    public MemoAdapter(ArrayList<Memo> arrayList, Context context) {
-        this.memoData = arrayList;
+    public MemoAdapter(ArrayList<Memo>memoData,Context context) {
+        this.memoData= memoData;
         parentContext = context;
     }
 
@@ -72,7 +57,7 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         MemoViewHolder cvh = (MemoViewHolder) holder;
-        cvh.getTextViewTitle().setText(memoData.get(position).getTextViewTitle());
+        cvh.textViewTitle.setText(memoData.get(position).getTitle());
         cvh.getTextDate().setText(memoData.get(position).getTextDate());
         if (isDeleting) {
             cvh.getDeleteButton().setVisibility(View.VISIBLE);
@@ -107,7 +92,6 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG).show();
         }
     }
-`
 
     @Override
     public int getItemCount() {
