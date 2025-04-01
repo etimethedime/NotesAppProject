@@ -173,7 +173,7 @@
     <RadioGroup
         android:id="@+id/radioGroupPriority"
         android:layout_width="142dp"
-        android:layout_height="94dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.051"
@@ -182,22 +182,17 @@
         app:layout_constraintVertical_bias="0.474">
 
         <RadioButton
-            android:id="@+id/radioHighPriority"
+            android:id="@+id/radioASC"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="High" />
+            android:text="ASC" />
 
         <RadioButton
-            android:id="@+id/radioMedPriority"
+            android:id="@+id/radioDSC"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:text="Medium" />
+            android:text="DSC" />
 
-        <RadioButton
-            android:id="@+id/radioLowPriority"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Low" />
     </RadioGroup>
 
     <Button
@@ -209,7 +204,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.698" />
+        app:layout_constraintVertical_bias="0.698"
+        tools:backgroundTint="#D3C380" />
 
     <TextView
         android:id="@+id/errorView"

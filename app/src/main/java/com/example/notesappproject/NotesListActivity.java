@@ -31,7 +31,7 @@ public class NotesListActivity extends AppCompatActivity {
             int position = viewHolder.getAdapterPosition();
             int notesId = memos.get(position).getId();
             Intent intent = new Intent(NotesListActivity.this, MainActivity.class);
-            intent.putExtra("notesID",notesId);
+            intent.putExtra("memoID", notesId);
             startActivity(intent);
         }
     };
@@ -57,15 +57,14 @@ public class NotesListActivity extends AppCompatActivity {
         String sortBy = getSharedPreferences("MyMemoPreferences",
                 Context.MODE_PRIVATE).getString("sortfield", "date");
 
-        String sortPriority = getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortpriority", "high");
+        String sortOrder = getSharedPreferences("MyMemoPreferences",
+                Context.MODE_PRIVATE).getString("sortorder", "ASC");
 
         MemoDBSource ds = new MemoDBSource(this);
 
-
         try {
             ds.open();
-            memos = ds.getMemos(sortBy,sortPriority);
+            memos = ds.getMemos(sortBy, sortOrder);
             ds.close();
 
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -75,6 +74,28 @@ public class NotesListActivity extends AppCompatActivity {
             memoAdapter = new MemoAdapter(memos, NotesListActivity.this);
             memoAdapter.setOnItemClickListener(onItemClickListener);
             notesList.setAdapter(memoAdapter);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String sortBy = getSharedPreferences("MyMemoPreferences", MODE_PRIVATE)
+                .getString("sortfield", "date");
+        String sortOrder = getSharedPreferences("MyMemoPreferences", MODE_PRIVATE)
+                .getString("sortorder", "ASC");
+        MemoDBSource ds = new MemoDBSource(this);
+        try {
+            ds.open();
+            memos = ds.getMemos(sortBy, sortOrder);
+            ds.close();
+            if (memoAdapter != null) {
+                memoAdapter = new MemoAdapter(memos, this);
+                memoAdapter.setOnItemClickListener(onItemClickListener);
+                notesList.setAdapter(memoAdapter);
+            }
         } catch (Exception e) {
             Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
         }
@@ -106,10 +127,9 @@ public class NotesListActivity extends AppCompatActivity {
         Switch s = findViewById(R.id.switchDelete);
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged (CompoundButton compoundButton,boolean b){
-                Boolean status = compoundButton.isChecked();
-                //MemoAdapter.setDelete(status);;
-                //MemoAdapter.notifyDataSetChanged();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                memoAdapter.setDelete(b);
+                memoAdapter.notifyDataSetChanged();
             }
         });
     }

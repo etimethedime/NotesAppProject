@@ -65,43 +65,32 @@ public class SettingsActivity extends AppCompatActivity{
     }
 
     public void initSettings() {
+        String sortBy = getSharedPreferences("MyMemoPreferences", Context.MODE_PRIVATE)
+                .getString("sortfield", "date");
+
+        String sortOrder = getSharedPreferences("MyMemoPreferences", Context.MODE_PRIVATE)
+                .getString("sortorder", "ASC");
+
+
         RadioButton rbPriority = findViewById(R.id.radioPriority);
         RadioButton rbSubject = findViewById(R.id.radioSubject);
         RadioButton rbDate = findViewById(R.id.radioDate);
 
-        RadioButton rbHigh = findViewById(R.id.radioHighPriority);
-        RadioButton rbMed = findViewById(R.id.radioMedPriority);
-        RadioButton rbLow = findViewById(R.id.radioLowPriority);
-
-
-        String sortBy = getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortfield", "date");
-
-        String sortPriority = getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortpriority", "high");
-
-
         if (sortBy.equalsIgnoreCase("priority")) {
             rbPriority.setChecked(true);
-        }
-        else if (sortBy.equalsIgnoreCase("subject")) {
+        } else if (sortBy.equalsIgnoreCase("subject")) {
             rbSubject.setChecked(true);
-        }
-        else {
+        } else {
             rbDate.setChecked(true);
         }
+        RadioButton rbASC = findViewById(R.id.radioASC);
+        RadioButton rbDSC = findViewById(R.id.radioDSC);
 
-
-        if (sortPriority.equalsIgnoreCase("high")) {
-            rbHigh.setChecked(true);
+        if (sortOrder.equalsIgnoreCase("ASC")) {
+            rbASC.setChecked(true);
+        } else {
+            rbDSC.setChecked(true);
         }
-        else if (sortPriority.equalsIgnoreCase("med")) {
-            rbMed.setChecked(true);
-        }
-        else {
-            rbLow.setChecked(true);
-        }
-
     }
 
     private void initSortByClick() {
@@ -126,19 +115,16 @@ public class SettingsActivity extends AppCompatActivity{
     private void initSortPriorityClick() {
         RadioGroup rgSortBy = findViewById(R.id.radioGroupPriority);
         rgSortBy.setOnCheckedChangeListener((group, checkedId) -> {
-            RadioButton rbHigh = SettingsActivity.this.findViewById(R.id.radioHighPriority);
-            RadioButton rbMed = SettingsActivity.this.findViewById(R.id.radioMedPriority);
-            if (rbHigh.isChecked()) {
-                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
-                        Context.MODE_PRIVATE).edit().putString("sortpriority", "high").apply();
-            } else if (rbMed.isChecked()) {
-                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
-                        Context.MODE_PRIVATE).edit().putString("sortpriority", "med").apply();
-            } else {
-                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
-                        Context.MODE_PRIVATE).edit().putString("sortpriority", "low").apply();
-            }
+            RadioButton rbASC = SettingsActivity.this.findViewById(R.id.radioASC);
+            RadioButton rbDSC = SettingsActivity.this.findViewById(R.id.radioDSC);
 
+            if (rbASC.isChecked()) {
+                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortorder", "ASC").apply();
+            } else if (rbDSC.isChecked()) {
+                SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortorder", "DESC").apply();
+            }
         });
     }
 
