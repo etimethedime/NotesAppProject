@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         }
         initSaveButton();
         initTextChangedEvents();
+        initPriorityRadioGroup();
     }
     private void setDefaultDate() {
         EditText dateText = findViewById(R.id.DateEditText);
@@ -110,6 +111,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
+    }
+    private void initPriorityRadioGroup() {
+        RadioGroup priorityRadioGroup = findViewById(R.id.priorityRadioGroup);
+
+        priorityRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int priority = 0; // Default
+
+                if (checkedId == R.id.HighRadioButton) {
+                    priority = 2;
+                } else if (checkedId == R.id.MediumRadioButton) {
+                    priority = 1;
+                } else if (checkedId == R.id.LowRadioButton) {
+                    priority = 0;
+                }
+
+                currentMemo.setPriority(priority);
+                Log.d("MainActivity", "Selected priority: " + priority);
+            }
+        });
     }
 
     private void initSaveButton() {
