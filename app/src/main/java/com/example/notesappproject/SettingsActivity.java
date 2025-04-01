@@ -3,6 +3,7 @@ package com.example.notesappproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -137,6 +138,7 @@ public class SettingsActivity extends AppCompatActivity{
 
         search.setOnClickListener( s -> {
             String keyword = searchBar.getText().toString().trim();
+            Log.d("SearchKeyword", "Keyword entered: " + keyword);
             if (!keyword.isEmpty()) {
                 Intent intent = new Intent(SettingsActivity.this, NotesListActivity.class);
                 intent.putExtra("SEARCH_KEYWORD", keyword);

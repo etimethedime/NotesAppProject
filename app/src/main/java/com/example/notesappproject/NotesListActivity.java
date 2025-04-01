@@ -3,6 +3,7 @@ package com.example.notesappproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -22,7 +23,8 @@ import java.util.ArrayList;
 public class NotesListActivity extends AppCompatActivity {
 
     private ArrayList<Memo> memos;
-    MemoAdapter memoAdapter;
+    private MemoAdapter memoAdapter;
+    private RecyclerView notesList;
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
@@ -35,8 +37,6 @@ public class NotesListActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
-
-    RecyclerView notesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,51 +53,74 @@ public class NotesListActivity extends AppCompatActivity {
         initListButton();
         initSettingsButton();
         initDeleteSwitch();
+        notesList = findViewById(R.id.rvNotes);
+        notesList.setLayoutManager(new LinearLayoutManager(this));
 
-        String sortBy = getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortfield", "date");
-
-        String sortOrder = getSharedPreferences("MyMemoPreferences",
-                Context.MODE_PRIVATE).getString("sortorder", "ASC");
-
-        MemoDBSource ds = new MemoDBSource(this);
-
-        try {
-            ds.open();
-            memos = ds.getMemos(sortBy, sortOrder);
-            ds.close();
-
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            notesList = findViewById(R.id.rvNotes);
-            notesList.setLayoutManager(layoutManager);
-
-            memoAdapter = new MemoAdapter(memos, NotesListActivity.this);
-            memoAdapter.setOnItemClickListener(onItemClickListener);
-            notesList.setAdapter(memoAdapter);
-        } catch (Exception e) {
-            Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
+        String keyword = getIntent().getStringExtra("SEARCH_KEYWORD");
+        Log.d("KeywordCheck", "Keyword received: " + keyword);
+        if (keyword != null && !keyword.isEmpty()) {
+            displayResults(keyword);
+        } else {
+            loadMemos();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        String keyword = getIntent().getStringExtra("SEARCH_KEYWORD");
+        if (keyword != null && !keyword.isEmpty()) {
+            displayResults(keyword);
+        } else {
+            loadMemos();
+        }
+    }
+
+    private void displayResults(String keyword) {
+        MemoDBSource ds = new MemoDBSource(this);
+        try {
+            ds.open();
+            memos = ds.searchMemos(keyword);
+            ds.close();
+
+            Log.d("SearchResults", "Number of results found: " + memos.size());
+
+            if (memos.isEmpty()) {
+                Log.d("SearchResults", "No results found.");
+            }
+
+            updateRecyclerView();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error searching memos", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    private void loadMemos() {
         String sortBy = getSharedPreferences("MyMemoPreferences", MODE_PRIVATE)
                 .getString("sortfield", "date");
         String sortOrder = getSharedPreferences("MyMemoPreferences", MODE_PRIVATE)
                 .getString("sortorder", "ASC");
+
         MemoDBSource ds = new MemoDBSource(this);
         try {
             ds.open();
             memos = ds.getMemos(sortBy, sortOrder);
             ds.close();
-            if (memoAdapter != null) {
-                memoAdapter = new MemoAdapter(memos, this);
-                memoAdapter.setOnItemClickListener(onItemClickListener);
-                notesList.setAdapter(memoAdapter);
-            }
+            updateRecyclerView();
         } catch (Exception e) {
             Toast.makeText(this, "Error retrieving memos", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateRecyclerView() {
+        if (memoAdapter == null) {
+            memoAdapter = new MemoAdapter(memos, this);
+            memoAdapter.setOnItemClickListener(onItemClickListener);
+            notesList.setAdapter(memoAdapter);
+        } else {
+            memoAdapter.setMemos(memos);
+            memoAdapter.notifyDataSetChanged();
         }
     }
 
@@ -123,14 +146,12 @@ public class NotesListActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
     private void initDeleteSwitch() {
         Switch s = findViewById(R.id.switchDelete);
-        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                memoAdapter.setDelete(b);
-                memoAdapter.notifyDataSetChanged();
-            }
+        s.setOnCheckedChangeListener((compoundButton, b) -> {
+            memoAdapter.setDelete(b);
+            memoAdapter.notifyDataSetChanged();
         });
     }
 }

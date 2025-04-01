@@ -64,7 +64,6 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
         cvh.textDate.setText(memoData.get(position).getDate());
         String priorityText;
         int priority = memoData.get(position).getPriority();
-        Log.d("MemoAdapter", "Priority value: " + priority);
         if (priority == 2) {
             priorityText = "High";
         } else if (priority == 1) {
@@ -107,6 +106,10 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
         } catch (Exception e) {
             Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG).show();
         }
+    }
+    public void setMemos(ArrayList<Memo> memoList) {
+        this.memoData = memoList;
+        notifyDataSetChanged();
     }
 
     @Override
