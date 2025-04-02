@@ -118,14 +118,14 @@ public class MainActivity extends AppCompatActivity {
         priorityRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int priority = 0; // Default
+                int priority = -1; // Default
 
                 if (checkedId == R.id.HighRadioButton) {
-                    priority = 2;
+                    priority = 3;
                 } else if (checkedId == R.id.MediumRadioButton) {
-                    priority = 1;
+                    priority = 2;
                 } else if (checkedId == R.id.LowRadioButton) {
-                    priority = 0;
+                    priority = 1;
                 }
 
                 currentMemo.setPriority(priority);

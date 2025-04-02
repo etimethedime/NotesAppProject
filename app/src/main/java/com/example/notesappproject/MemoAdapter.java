@@ -64,11 +64,11 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
         cvh.textDate.setText(memoData.get(position).getDate());
         String priorityText;
         int priority = memoData.get(position).getPriority();
-        if (priority == 2) {
+        if (priority == 3) {
             priorityText = "High";
-        } else if (priority == 1) {
+        } else if (priority == 2) {
             priorityText = "Medium";
-        } else if (priority == 0) {
+        } else if (priority == 1) {
             priorityText = "Low";
         } else {
             priorityText = "Unknown";
