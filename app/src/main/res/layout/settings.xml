@@ -97,7 +97,7 @@
             android:id="@+id/radioSubject"
             android:layout_width="match_parent"
             android:layout_height="28dp"
-            android:text="Subject" />
+            android:text="Title" />
 
         <RadioButton
             android:id="@+id/radioDate"
@@ -162,7 +162,7 @@
         android:layout_width="241dp"
         android:layout_height="46dp"
         android:ems="10"
-        android:hint="Enter Subject"
+        android:hint="Enter Key Word:"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

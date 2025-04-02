@@ -104,7 +104,7 @@ public class SettingsActivity extends AppCompatActivity{
                         Context.MODE_PRIVATE).edit().putString("sortfield", "priority").apply();
             } else if (rbSubject.isChecked()) {
                 SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
-                        Context.MODE_PRIVATE).edit().putString("sortfield", "subject").apply();
+                        Context.MODE_PRIVATE).edit().putString("sortfield", "title").apply();
             } else {
                 SettingsActivity.this.getSharedPreferences("MyMemoPreferences",
                         Context.MODE_PRIVATE).edit().putString("sortfield", "date").apply();
