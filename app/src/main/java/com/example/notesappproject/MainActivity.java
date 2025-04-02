@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setDefaultDate() {
         EditText dateText = findViewById(R.id.DateEditText);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         String currentDate = sdf.format(new Date());
         dateText.setText(currentDate);
         currentMemo.setDate(currentDate);
