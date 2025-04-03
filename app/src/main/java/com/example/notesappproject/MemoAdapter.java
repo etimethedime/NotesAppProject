@@ -2,6 +2,7 @@ package com.example.notesappproject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -63,18 +65,23 @@ public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int
         cvh.textViewTitle.setText(memoData.get(position).getTitle());
         cvh.textDate.setText(memoData.get(position).getDate());
         String priorityText;
+        int priorityColor = Color.BLACK;
         int priority = memoData.get(position).getPriority();
         if (priority == 3) {
             priorityText = "High";
+            priorityColor = ContextCompat.getColor(parentContext, R.color.system_red);
         } else if (priority == 2) {
             priorityText = "Medium";
+            priorityColor = ContextCompat.getColor(parentContext, R.color.medium_yellow);
         } else if (priority == 1) {
             priorityText = "Low";
+            priorityColor = ContextCompat.getColor(parentContext, R.color.low_green);
         } else {
             priorityText = "Unknown";
         }
 
         cvh.textPriority.setText(priorityText);
+        cvh.textPriority.setTextColor(priorityColor);
         if (isDeleting) {
             cvh.deleteButton.setVisibility(View.VISIBLE);
             cvh.deleteButton.setOnClickListener(new View.OnClickListener() {
